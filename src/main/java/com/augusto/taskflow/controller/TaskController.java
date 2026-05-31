@@ -3,6 +3,7 @@ package com.augusto.taskflow.controller;
 import com.augusto.taskflow.dto.TaskRequestDTO;
 import com.augusto.taskflow.dto.TaskResponseDTO;
 import com.augusto.taskflow.model.Task;
+import com.augusto.taskflow.model.TaskStatus;
 import com.augusto.taskflow.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> findAll() {
+    public List<TaskResponseDTO> findAll() {
         return service.findAll();
     }
 
@@ -32,7 +33,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public Task findById(@PathVariable Long id) {
+    public TaskResponseDTO findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
@@ -47,6 +48,13 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @GetMapping("/status/{status}")
+    public List<TaskResponseDTO> findByStatus(
+            @PathVariable TaskStatus status) {
+
+        return service.findByStatus(status);
     }
 }
 

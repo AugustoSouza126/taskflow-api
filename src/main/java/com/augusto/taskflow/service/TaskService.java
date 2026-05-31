@@ -1,6 +1,7 @@
 package com.augusto.taskflow.service;
 
 import com.augusto.taskflow.model.Task;
+import com.augusto.taskflow.model.TaskStatus;
 import com.augusto.taskflow.repository.TaskRepository;
 import com.augusto.taskflow.exception.TaskNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,20 @@ public class TaskService {
         this.repository = repository;
     }
 
-    public List<Task> findAll() {
-        return repository.findAll();
+    public List<TaskResponseDTO> findAll() {
+
+        return repository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+    public List<TaskResponseDTO> findByStatus(TaskStatus status) {
+
+        return repository.findByStatus(status)
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
     }
 
     public TaskResponseDTO save(TaskRequestDTO dto) {
@@ -32,17 +45,16 @@ public class TaskService {
 
         Task savedTask = repository.save(task);
 
-        return new TaskResponseDTO(
-                savedTask.getId(),
-                savedTask.getTitle(),
-                savedTask.getDescription(),
-                savedTask.getStatus()
-        );
+        return toResponseDTO(savedTask);
     }
 
-    public Task findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+    public TaskResponseDTO findById(Long id) {
+
+        Task task = repository.findById(id)
+                .orElseThrow(() ->
+                        new TaskNotFoundException("Task not found"));
+
+        return toResponseDTO(task);
     }
 
     public Task update(Long id, Task updatedTask) {
@@ -63,5 +75,17 @@ public class TaskService {
                 .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
         repository.delete(task);
+    }
+
+    private TaskResponseDTO toResponseDTO(Task task) {
+
+        return new TaskResponseDTO(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus(),
+                task.getCreatedAt(),
+                task.getUpdatedAt()
+        );
     }
 }
