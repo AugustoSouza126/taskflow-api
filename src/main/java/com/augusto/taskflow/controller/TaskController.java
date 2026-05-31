@@ -2,6 +2,7 @@ package com.augusto.taskflow.controller;
 
 import com.augusto.taskflow.model.Task;
 import com.augusto.taskflow.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task save(@RequestBody Task task) {
+    public Task save(@Valid @RequestBody Task task) {
         return service.save(task);
     }
 
@@ -34,7 +35,7 @@ public class TaskController {
     @PutMapping("/{id}")
     public Task update(
             @PathVariable Long id,
-            @RequestBody Task task) {
+            @Valid @RequestBody Task task) {
 
         return service.update(id, task);
     }

@@ -2,6 +2,7 @@ package com.augusto.taskflow.service;
 
 import com.augusto.taskflow.model.Task;
 import com.augusto.taskflow.repository.TaskRepository;
+import com.augusto.taskflow.exception.TaskNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,13 +26,13 @@ public class TaskService {
 
     public Task findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
     }
 
     public Task update(Long id, Task updatedTask) {
 
         Task task = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
         task.setTitle(updatedTask.getTitle());
         task.setDescription(updatedTask.getDescription());
@@ -43,7 +44,7 @@ public class TaskService {
     public void delete(Long id) {
 
         Task task = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
 
         repository.delete(task);
     }
