@@ -6,6 +6,7 @@ import com.augusto.taskflow.model.Task;
 import com.augusto.taskflow.model.TaskStatus;
 import com.augusto.taskflow.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
+
 
     private final TaskService service;
 
@@ -55,6 +57,14 @@ public class TaskController {
             @PathVariable TaskStatus status) {
 
         return service.findByStatus(status);
+    }
+
+    @GetMapping("/paged")
+    public Page<TaskResponseDTO> findAllPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        return service.findAllPaged(page, size);
     }
 }
 

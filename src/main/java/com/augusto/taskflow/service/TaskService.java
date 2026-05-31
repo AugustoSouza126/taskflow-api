@@ -7,6 +7,9 @@ import com.augusto.taskflow.exception.TaskNotFoundException;
 import org.springframework.stereotype.Service;
 import com.augusto.taskflow.dto.TaskRequestDTO;
 import com.augusto.taskflow.dto.TaskResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -87,5 +90,13 @@ public class TaskService {
                 task.getCreatedAt(),
                 task.getUpdatedAt()
         );
+    }
+
+    public Page<TaskResponseDTO> findAllPaged(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return repository.findAll(pageable)
+                .map(this::toResponseDTO);
     }
 }
