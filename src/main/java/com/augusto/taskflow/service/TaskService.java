@@ -4,6 +4,8 @@ import com.augusto.taskflow.model.Task;
 import com.augusto.taskflow.repository.TaskRepository;
 import com.augusto.taskflow.exception.TaskNotFoundException;
 import org.springframework.stereotype.Service;
+import com.augusto.taskflow.dto.TaskRequestDTO;
+import com.augusto.taskflow.dto.TaskResponseDTO;
 
 import java.util.List;
 
@@ -20,8 +22,22 @@ public class TaskService {
         return repository.findAll();
     }
 
-    public Task save(Task task) {
-        return repository.save(task);
+    public TaskResponseDTO save(TaskRequestDTO dto) {
+
+        Task task = new Task();
+
+        task.setTitle(dto.getTitle());
+        task.setDescription(dto.getDescription());
+        task.setStatus(dto.getStatus());
+
+        Task savedTask = repository.save(task);
+
+        return new TaskResponseDTO(
+                savedTask.getId(),
+                savedTask.getTitle(),
+                savedTask.getDescription(),
+                savedTask.getStatus()
+        );
     }
 
     public Task findById(Long id) {

@@ -1,5 +1,7 @@
 package com.augusto.taskflow.controller;
 
+import com.augusto.taskflow.dto.TaskRequestDTO;
+import com.augusto.taskflow.dto.TaskResponseDTO;
 import com.augusto.taskflow.model.Task;
 import com.augusto.taskflow.service.TaskService;
 import jakarta.validation.Valid;
@@ -23,8 +25,10 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task save(@Valid @RequestBody Task task) {
-        return service.save(task);
+    public TaskResponseDTO save(
+            @Valid @RequestBody TaskRequestDTO dto) {
+
+        return service.save(dto);
     }
 
     @GetMapping("/{id}")
