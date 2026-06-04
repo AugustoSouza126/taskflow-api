@@ -1,31 +1,65 @@
 # TaskFlow API
 
-TaskFlow API is a RESTful backend application developed with Java and Spring Boot for managing tasks and productivity workflows.
+TaskFlow is a RESTful API developed with Java and Spring Boot for task management and productivity workflows. The project includes authentication and authorization using JWT, user-specific task ownership, Docker support, input validation, exception handling, and pagination.
 
 ## Features
 
+### Authentication & Security
+
+* User registration
+* User login
+* JWT token generation
+* Protected endpoints
+* BCrypt password encryption
+* User-specific task access
+* Spring Security integration
+
+### Task Management
+
 * Create tasks
 * List tasks
+* Search task by ID
 * Update tasks
 * Delete tasks
-* Task status management
+* Filter tasks by status
+* Pagination support
 
 ## Technologies
 
 * Java 21
-* Spring Boot
+* Spring Boot 4
+* Spring Security
 * Spring Data JPA
-* MySQL
+* PostgreSQL
+* JWT (JJWT)
+* Docker & Docker Compose
+* Lombok
 * Maven
+* Swagger / OpenAPI
 
 ## Project Structure
 
 ```text
-controller/
-service/
-repository/
-model/
-dto/
+src/main/java
+├── config
+├── controller
+├── dto
+├── exception
+├── model
+├── repository
+└── service
+```
+
+## Authentication Flow
+
+```text
+User Login
+     ↓
+JWT Token
+     ↓
+Authorization: Bearer <token>
+     ↓
+Protected Endpoints
 ```
 
 ## Task Status
@@ -36,24 +70,111 @@ dto/
 
 ## API Endpoints
 
-| Method | Endpoint    | Description       |
-| ------ | ----------- | ----------------- |
-| GET    | /tasks      | Get all tasks     |
-| GET    | /tasks/{id} | Get task by id    |
-| POST   | /tasks      | Create a new task |
-| PUT    | /tasks/{id} | Update a task     |
-| DELETE | /tasks/{id} | Delete a task     |
+### Authentication
+
+| Method | Endpoint       | Description         |
+| ------ | -------------- | ------------------- |
+| POST   | /auth/register | Register a new user |
+| POST   | /auth/login    | Authenticate user   |
+| GET    | /auth/test     | Validate JWT token  |
+
+### Tasks
+
+| Method | Endpoint               | Description                           |
+| ------ | ---------------------- | ------------------------------------- |
+| GET    | /tasks                 | Get all tasks from authenticated user |
+| GET    | /tasks/{id}            | Get task by id                        |
+| POST   | /tasks                 | Create a task                         |
+| PUT    | /tasks/{id}            | Update a task                         |
+| DELETE | /tasks/{id}            | Delete a task                         |
+| GET    | /tasks/status/{status} | Filter by status                      |
+| GET    | /tasks/paged           | Paginated task listing                |
+
+## Running Locally
+
+### Prerequisites
+
+* Java 21
+* Maven
+* PostgreSQL
+
+### Configure Database
+
+Update the `application.properties` file:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/taskflow
+spring.datasource.username=postgres
+spring.datasource.password=your_password
+```
+
+### Run Application
+
+```bash
+./mvnw spring-boot:run
+```
+
+Or:
+
+```bash
+./mvnw clean package
+java -jar target/Taskflow-0.0.1-SNAPSHOT.jar
+```
+
+Application:
+
+```text
+http://localhost:8080
+```
+
+Swagger:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+## Running with Docker
+
+### Build Containers
+
+```bash
+docker compose build
+```
+
+### Start Containers
+
+```bash
+docker compose up
+```
+
+### Stop Containers
+
+```bash
+docker compose down
+```
+
+Application:
+
+```text
+http://localhost:8080
+```
+
+Swagger:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
 
 ## Future Improvements
 
-* User authentication
-* JWT authorization
-* User-specific tasks
-* Docker support
-* Task filtering and search
+* React Frontend
+* Cloud Deployment (AWS/Railway/Render)
+* Unit and Integration Tests
+* CI/CD Pipeline
+* Refresh Token Authentication
 
 ## Author
 
-Augusto Souza
+**Augusto Souza**
 
 Computer Science Student
