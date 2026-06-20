@@ -18,16 +18,21 @@ public class CorsConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173")
+                List.of(
+                        "http://localhost:5173",
+                        "https://taskflow-frontend-eight-psi.vercel.app"
+                )
         );
 
         configuration.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE")
+                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
         );
 
         configuration.setAllowedHeaders(
                 List.of("*")
         );
+
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
