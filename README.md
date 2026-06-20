@@ -1,6 +1,18 @@
 # TaskFlow API
 
-TaskFlow is a RESTful API developed with Java and Spring Boot for task management and productivity workflows. The project includes authentication and authorization using JWT, user-specific task ownership, Docker support, input validation, exception handling, and pagination.
+TaskFlow API is a RESTful backend application developed with Java and Spring Boot for task management and productivity workflows.
+
+The project provides JWT authentication, user-specific task ownership, secure access control, task management operations, and PostgreSQL persistence.
+
+## Live API
+
+Production URL:
+
+https://taskflow-api-zytv.onrender.com
+
+Swagger Documentation:
+
+https://taskflow-api-zytv.onrender.com/swagger-ui/index.html
 
 ## Features
 
@@ -9,20 +21,31 @@ TaskFlow is a RESTful API developed with Java and Spring Boot for task managemen
 * User registration
 * User login
 * JWT token generation
+* JWT validation
 * Protected endpoints
 * BCrypt password encryption
-* User-specific task access
 * Spring Security integration
+* User-specific task ownership
 
 ### Task Management
 
 * Create tasks
-* List tasks
+* List all tasks
 * Search task by ID
 * Update tasks
 * Delete tasks
 * Filter tasks by status
-* Pagination support
+* Task ownership validation
+
+### Database
+
+* PostgreSQL integration
+* JPA/Hibernate persistence
+* Automatic schema update
+
+### Documentation
+
+* Swagger / OpenAPI integration
 
 ## Technologies
 
@@ -32,10 +55,28 @@ TaskFlow is a RESTful API developed with Java and Spring Boot for task managemen
 * Spring Data JPA
 * PostgreSQL
 * JWT (JJWT)
-* Docker & Docker Compose
-* Lombok
+* Docker
 * Maven
+* Lombok
 * Swagger / OpenAPI
+
+## Architecture
+
+```text
+Client
+   ↓
+Spring Security
+   ↓
+JWT Filter
+   ↓
+Controllers
+   ↓
+Services
+   ↓
+Repositories
+   ↓
+PostgreSQL
+```
 
 ## Project Structure
 
@@ -44,10 +85,10 @@ src/main/java
 ├── config
 ├── controller
 ├── dto
-├── exception
 ├── model
 ├── repository
-└── service
+├── service
+└── TaskflowApplication
 ```
 
 ## Authentication Flow
@@ -55,7 +96,7 @@ src/main/java
 ```text
 User Login
      ↓
-JWT Token
+JWT Token Generated
      ↓
 Authorization: Bearer <token>
      ↓
@@ -64,31 +105,33 @@ Protected Endpoints
 
 ## Task Status
 
-* TODO
-* IN_PROGRESS
-* DONE
+```text
+TODO
+IN_PROGRESS
+DONE
+```
 
 ## API Endpoints
 
 ### Authentication
 
-| Method | Endpoint       | Description         |
-| ------ | -------------- | ------------------- |
-| POST   | /auth/register | Register a new user |
-| POST   | /auth/login    | Authenticate user   |
-| GET    | /auth/test     | Validate JWT token  |
+| Method | Endpoint       | Description            |
+| ------ | -------------- | ---------------------- |
+| POST   | /auth/register | Register a new user    |
+| POST   | /auth/login    | Authenticate user      |
+| GET    | /auth/me       | Get authenticated user |
+| GET    | /auth/test     | Validate JWT token     |
 
 ### Tasks
 
-| Method | Endpoint               | Description                           |
-| ------ | ---------------------- | ------------------------------------- |
-| GET    | /tasks                 | Get all tasks from authenticated user |
-| GET    | /tasks/{id}            | Get task by id                        |
-| POST   | /tasks                 | Create a task                         |
-| PUT    | /tasks/{id}            | Update a task                         |
-| DELETE | /tasks/{id}            | Delete a task                         |
-| GET    | /tasks/status/{status} | Filter by status                      |
-| GET    | /tasks/paged           | Paginated task listing                |
+| Method | Endpoint               | Description            |
+| ------ | ---------------------- | ---------------------- |
+| GET    | /tasks                 | List user tasks        |
+| GET    | /tasks/{id}            | Get task by id         |
+| POST   | /tasks                 | Create task            |
+| PUT    | /tasks/{id}            | Update task            |
+| DELETE | /tasks/{id}            | Delete task            |
+| GET    | /tasks/status/{status} | Filter tasks by status |
 
 ## Running Locally
 
@@ -100,7 +143,7 @@ Protected Endpoints
 
 ### Configure Database
 
-Update the `application.properties` file:
+Update application.properties:
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/taskflow
@@ -114,7 +157,7 @@ spring.datasource.password=your_password
 ./mvnw spring-boot:run
 ```
 
-Or:
+or
 
 ```bash
 ./mvnw clean package
@@ -124,57 +167,59 @@ java -jar target/Taskflow-0.0.1-SNAPSHOT.jar
 Application:
 
 ```text
-http://localhost:8080
+http://localhost:8081
 ```
 
 Swagger:
 
 ```text
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8081/swagger-ui/index.html
 ```
 
-## Running with Docker
+## Docker
 
-### Build Containers
+Build image:
 
 ```bash
-docker compose build
+docker build -t taskflow-api .
 ```
 
-### Start Containers
+Run container:
 
 ```bash
-docker compose up
+docker run -p 8080:8080 taskflow-api
 ```
 
-### Stop Containers
+## Deployment
 
-```bash
-docker compose down
-```
+### Backend
 
-Application:
+* Render
 
-```text
-http://localhost:8080
-```
+### Database
 
-Swagger:
+* Neon PostgreSQL
 
-```text
-http://localhost:8080/swagger-ui/index.html
-```
+### Frontend
+
+* Vercel
 
 ## Future Improvements
 
-* React Frontend
-* Cloud Deployment (AWS/Railway/Render)
-* Unit and Integration Tests
-* CI/CD Pipeline
 * Refresh Token Authentication
+* Unit Tests
+* Integration Tests
+* CI/CD Pipeline
+* Role-Based Authorization (Admin/User)
 
 ## Author
 
-**Augusto Souza**
+Augusto Souza
 
-Computer Science Student
+Computer Science Student – URI Santiago
+
+GitHub:
+https://github.com/AugustoSouza126
+
+LinkedIn:
+https://www.linkedin.com/in/augusto-souza-795324313/
